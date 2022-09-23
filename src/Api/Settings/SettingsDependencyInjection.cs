@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 
 namespace Api.Settings;
 
-public static class SettingsDependencyInjection
+internal static class SettingsDependencyInjection
 {
-    public static IServiceCollection AddSettings(this IServiceCollection services)
+    internal static IServiceCollection AddSettings(this IServiceCollection services)
     {
         // Database
         services.AddSingleton<IValidateOptions<DatabaseSettings>, ValidateDatabaseSettings>();
