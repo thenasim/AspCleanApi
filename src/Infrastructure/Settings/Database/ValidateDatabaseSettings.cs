@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace Api.Settings.Database;
+namespace Infrastructure.Settings.Database;
 
 public class ValidateDatabaseSettings : IValidateOptions<DatabaseSettings>
 {
     public ValidateOptionsResult Validate(string name, DatabaseSettings options)
     {
         const string errorHeadline = "Validation failed in appsettings.json";
-        
+
         if (string.IsNullOrEmpty(options.ConnectionString))
         {
             return ValidateOptionsResult.Fail($"{errorHeadline}: {nameof(options.ConnectionString)} can not be empty.");
@@ -22,7 +22,7 @@ public class ValidateDatabaseSettings : IValidateOptions<DatabaseSettings>
         {
             return ValidateOptionsResult.Fail($"{errorHeadline}: {nameof(options.CommandTimeout)} can not be less than 30.");
         }
-        
+
         return ValidateOptionsResult.Success;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Api.Settings.Database;
+﻿namespace Infrastructure.Settings.Database;
 
 public class DatabaseSettings
 {
