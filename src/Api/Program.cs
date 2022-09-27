@@ -17,6 +17,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi3();
 }
 
+app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

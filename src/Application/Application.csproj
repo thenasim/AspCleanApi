@@ -20,8 +20,4 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Products\Common" />
-  </ItemGroup>
-
 </Project>
