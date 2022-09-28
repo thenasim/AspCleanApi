@@ -1,4 +1,4 @@
-using Application.Orders.Commands;
+using Application.Orders.Commands.CreateOrder;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

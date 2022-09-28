@@ -3,13 +3,13 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Products.Queries;
+namespace Application.Products.Queries.GetProductsWithPagination;
 
-public class GetProductsWithPaginationHandler : IRequestHandler<GetProductsWithPaginationQuery, List<Product>>
+public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductsWithPaginationQuery, List<Product>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetProductsWithPaginationHandler(IApplicationDbContext context)
+    public GetProductsWithPaginationQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }

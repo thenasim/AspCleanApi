@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.Orders.Commands;
+namespace Application.Orders.Commands.CreateOrder;
 
 public class CreateOrderCommand : IRequest<int>
 {

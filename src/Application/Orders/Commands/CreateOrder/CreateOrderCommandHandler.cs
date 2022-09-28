@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Orders.Commands;
+namespace Application.Orders.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
 {
@@ -21,7 +21,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
         // Check if product exists
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.ProductId);
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
         if (product is null)
         {
             throw new ValidationException("Invalid product Id");

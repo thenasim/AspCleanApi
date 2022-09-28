@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using MediatR;
 
-namespace Application.Products.Queries;
+namespace Application.Products.Queries.GetProductsWithPagination;
 
 public class GetProductsWithPaginationQuery : IRequest<List<Product>>
 {

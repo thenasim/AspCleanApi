@@ -1,5 +1,5 @@
-﻿using Application.Products.Commands;
-using Application.Products.Queries;
+﻿using Application.Products.Commands.CreateProduct;
+using Application.Products.Queries.GetProductsWithPagination;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

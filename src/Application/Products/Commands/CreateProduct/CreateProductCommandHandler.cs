@@ -2,13 +2,13 @@
 using Domain.Entities;
 using MediatR;
 
-namespace Application.Products.Commands;
+namespace Application.Products.Commands.CreateProduct;
 
-public class CreateProductHandler : IRequestHandler<CreateProductCommand, int>
+public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateProductHandler(IApplicationDbContext context)
+    public CreateProductCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
