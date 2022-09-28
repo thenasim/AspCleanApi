@@ -14,9 +14,9 @@ public static class InfrastructureDependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, bool isDevelopment)
     {
         services.AddSettings();
-        
-        // Configure Entity Framework
-        services.AddDbContextPool<ApplicationDbContext>((provider, optionsBuilder) =>
+
+        // Configure Entity Framework // TODO: AddDbContextPool (But dependency injection will not work in AppDbContext because context pool works like singleton)
+        services.AddDbContext<ApplicationDbContext>((provider, optionsBuilder) =>
         {
             var dbOptions = provider.GetService<IOptions<DatabaseSettings>>()?.Value ??
                             throw new Exception($"{nameof(DatabaseSettings)} could not be loaded.");
@@ -28,7 +28,8 @@ public static class InfrastructureDependencyInjection
                 serverAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
             });
             optionsBuilder.AddInterceptors(new AuditableEntitySaveChangesInterceptor());
-            
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
             if (isDevelopment)
             {
                 optionsBuilder.EnableDetailedErrors();
