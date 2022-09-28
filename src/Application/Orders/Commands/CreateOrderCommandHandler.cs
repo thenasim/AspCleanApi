@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Domain.Entities;
 using Domain.Events;
 using FluentValidation;
 using MediatR;
@@ -26,9 +27,17 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
             throw new ValidationException("Invalid product Id");
         }
 
+        var order = new Order
+        {
+            ProductId = request.ProductId,
+            TotalProductOrdered = request.Quantity
+        };
+
+        _context.Orders.Add(order);
         product.AddDomainEvent(new OrderCreated(product, request.Quantity));
+
         await _context.SaveChangesAsync(cancellationToken);
 
-        return 1;
+        return order.Id;
     }
 }
