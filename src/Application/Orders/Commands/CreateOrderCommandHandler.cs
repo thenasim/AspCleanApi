@@ -18,22 +18,24 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
 
     public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var product = await _context.Products
-            .AsTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ProductId);
+        _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
+        // Check if product exists
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.ProductId);
         if (product is null)
         {
             throw new ValidationException("Invalid product Id");
         }
 
+        // Create order
         var order = new Order
         {
             ProductId = request.ProductId,
             TotalProductOrdered = request.Quantity
         };
-
         _context.Orders.Add(order);
+
+        // Send domain events
         product.AddDomainEvent(new OrderCreated(product, request.Quantity));
 
         await _context.SaveChangesAsync(cancellationToken);

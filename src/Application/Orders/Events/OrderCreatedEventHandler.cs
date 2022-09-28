@@ -10,7 +10,7 @@ public class OrderCreatedEventHandler : INotificationHandler<OrderCreated>
 
     public OrderCreatedEventHandler(IApplicationDbContext context)
     {
-        _context=context;
+        _context = context;
     }
 
     public Task Handle(OrderCreated notification, CancellationToken cancellationToken)
