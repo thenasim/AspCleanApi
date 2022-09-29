@@ -12,7 +12,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
     {
         _validator = validator;
     }
-    
+
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
         if (_validator is null)
@@ -25,9 +25,9 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         if (validationResult.IsValid == false)
         {
             throw new ValidationException(validationResult.Errors.FirstOrDefault()?.ErrorMessage ??
-                                          "Unknown error occured");
+                                          "Unknown error occurred");
         }
-        
+
         return await next();
     }
 }
