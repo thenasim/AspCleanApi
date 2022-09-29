@@ -11,6 +11,12 @@ internal static class ApiDependencyInjection
         services.AddSwaggerDocument();
         services.AddSettings();
 
+        services.Configure<RouteOptions>(options =>
+        {
+            options.LowercaseQueryStrings = true;
+            options.LowercaseUrls = true;
+        });
+
         return services;
     }
 }
