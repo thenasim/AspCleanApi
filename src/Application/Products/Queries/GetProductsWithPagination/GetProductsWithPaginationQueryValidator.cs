@@ -8,9 +8,9 @@ public class GetProductsWithPaginationQueryValidator : AbstractValidator<GetProd
     {
         RuleFor(x => x.PageNumber)
             .GreaterThan(0);
-        
+
         RuleFor(x => x.PageSize)
-            .GreaterThan(10)
+            .GreaterThanOrEqualTo(10)
             .LessThanOrEqualTo(200);
     }
 }
