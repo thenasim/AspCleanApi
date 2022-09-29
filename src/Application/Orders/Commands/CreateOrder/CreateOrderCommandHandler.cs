@@ -18,10 +18,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
 
     public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
-
         // Check if product exists
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
+        var product = await _context.Products
+            .AsTracking()
+            .FirstOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
         if (product is null)
         {
             throw new ValidationException("Invalid product Id");
