@@ -1,4 +1,5 @@
-﻿using Api.Settings;
+﻿using Api.Common.Mappings;
+using Api.Settings;
 
 namespace Api;
 
@@ -10,6 +11,7 @@ internal static class ApiDependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerDocument();
         services.AddSettings();
+        services.AddMappings();
 
         services.Configure<RouteOptions>(options =>
         {
