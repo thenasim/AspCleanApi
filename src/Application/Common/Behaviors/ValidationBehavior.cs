@@ -22,12 +22,12 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid == false)
+        if (validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors.FirstOrDefault()?.ErrorMessage ??
-                                          "Unknown error occurred");
+            return await next();
         }
 
-        return await next();
+        // If validation error occurs
+        throw new ValidationException(validationResult.Errors.FirstOrDefault()?.ErrorMessage ?? "Unknown error occurred");
     }
 }
