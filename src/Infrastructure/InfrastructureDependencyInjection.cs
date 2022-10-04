@@ -28,6 +28,7 @@ public static class InfrastructureDependencyInjection
                 serverAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
                 serverAction.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
 
+                // Set db version
                 if (string.IsNullOrEmpty(dbOptions.DatabaseVersion) == false)
                 {
                     if (Version.TryParse(dbOptions.DatabaseVersion, out var dbVersion) == false)
