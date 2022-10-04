@@ -26,6 +26,16 @@ public static class InfrastructureDependencyInjection
                 serverAction.EnableRetryOnFailure(dbOptions.MaxRetryOnFailure);
                 serverAction.CommandTimeout(dbOptions.CommandTimeout);
                 serverAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                serverAction.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+
+                if (string.IsNullOrEmpty(dbOptions.DatabaseVersion) == false)
+                {
+                    if (Version.TryParse(dbOptions.DatabaseVersion, out var dbVersion) == false)
+                    {
+                        throw new Exception("Failed to parse DatabaseVersion provided in appsettings.json");
+                    }
+                    serverAction.SetPostgresVersion(dbVersion);
+                }
             });
             optionsBuilder.AddInterceptors(new AuditableEntitySaveChangesInterceptor());
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);

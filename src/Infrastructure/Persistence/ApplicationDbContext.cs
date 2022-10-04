@@ -13,7 +13,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IMediator mediator) : base(options)
     {
-        _mediator=mediator;
+        _mediator = mediator;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
