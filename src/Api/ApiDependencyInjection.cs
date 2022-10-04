@@ -1,5 +1,7 @@
 ﻿using Api.Common.Mappings;
 using Api.Settings;
+using Infrastructure.Common.Converters;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace Api;
 
@@ -7,7 +9,12 @@ internal static class ApiDependencyInjection
 {
     internal static IServiceCollection AddApi(this IServiceCollection services)
     {
-        services.AddControllers();
+        services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+            });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerDocument();
         services.AddSettings();

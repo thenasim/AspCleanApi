@@ -8,6 +8,8 @@ public interface IApplicationDbContext
 {
     DbSet<Product> Products { get; }
     DbSet<Order> Orders { get; }
+    DbSet<TestUser> TestUsers { get; }
+
     ChangeTracker ChangeTracker { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Infrastructure.Persistence;
 
@@ -14,11 +16,17 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator;
+
+        // Map enums
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // Set postgres enums
+        modelBuilder.HasPostgresEnum<Gender>();
 
         base.OnModelCreating(modelBuilder);
     }
@@ -32,4 +40,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Order> Orders => Set<Order>();
+    public DbSet<TestUser> TestUsers => Set<TestUser>();
 }
