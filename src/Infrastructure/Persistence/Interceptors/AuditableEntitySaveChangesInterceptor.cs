@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.Common.Interfaces.Services;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -6,10 +7,17 @@ namespace Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
+    private readonly IDateTimeService _dateTimeService;
+
+    public AuditableEntitySaveChangesInterceptor(IDateTimeService dateTimeService)
+    {
+        _dateTimeService = dateTimeService;
+    }
+
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         UpdateEntities(eventData.Context);
-        
+
         return base.SavingChanges(eventData, result);
     }
 
@@ -18,7 +26,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         CancellationToken cancellationToken = new())
     {
         UpdateEntities(eventData.Context);
-        
+
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
@@ -34,10 +42,10 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.Created = DateTime.UtcNow;
+                    entry.Entity.Created = _dateTimeService.Now;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.LastModified = DateTime.UtcNow;
+                    entry.Entity.LastModified = _dateTimeService.Now;
                     break;
             }
         }

@@ -12,7 +12,7 @@ public class DateOnlyJsonConverter : JsonConverter<DateOnly>
             return dateOnly;
         }
 
-        throw new JsonException("Failed to serialize date");
+        throw new JsonException("Failed to serialize DateOnly value");
     }
 
     public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)

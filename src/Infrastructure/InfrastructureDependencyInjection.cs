@@ -1,4 +1,6 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Services;
+using Infrastructure.Common.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Settings;
@@ -16,17 +18,18 @@ public static class InfrastructureDependencyInjection
         services.AddSettings();
 
         // Configure Entity Framework // TODO: AddDbContextPool (But dependency injection will not work in AppDbContext because context pool works like singleton)
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
         services.AddDbContext<ApplicationDbContext>((provider, optionsBuilder) =>
         {
             var dbOptions = provider.GetService<IOptions<DatabaseSettings>>()?.Value ??
                             throw new Exception($"{nameof(DatabaseSettings)} could not be loaded.");
+            var auditableEntitySaveChangesInterceptor = provider.GetRequiredService<AuditableEntitySaveChangesInterceptor>();
 
             optionsBuilder.UseNpgsql(dbOptions.ConnectionString!, serverAction =>
             {
                 serverAction.EnableRetryOnFailure(dbOptions.MaxRetryOnFailure);
                 serverAction.CommandTimeout(dbOptions.CommandTimeout);
                 serverAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                serverAction.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
 
                 // Set db version
                 if (string.IsNullOrEmpty(dbOptions.DatabaseVersion) == false)
@@ -38,7 +41,7 @@ public static class InfrastructureDependencyInjection
                     serverAction.SetPostgresVersion(dbVersion);
                 }
             });
-            optionsBuilder.AddInterceptors(new AuditableEntitySaveChangesInterceptor());
+            optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             if (isDevelopment)
@@ -48,6 +51,9 @@ public static class InfrastructureDependencyInjection
             }
         });
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        // Common services
+        services.AddTransient<IDateTimeService, DateTimeService>();
 
         return services;
     }
