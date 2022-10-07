@@ -1,0 +1,15 @@
+{
+  "sdk": {
+    "version": "6.0.401",
+    "rollForward": "latestMinor"
+  },
+  "scriptShell": "pwsh",
+  "scripts": {
+    "bd": "dotnet run --project .\\src\\Api",
+    "br": "dotnet run --project .\\src\\Api --configuration Release",
+    "efma": "dotnet ef migrations add -s .\\src\\Api -p .\\src\\Infrastructure -o Persistence\\Migrations",
+    "efmr": "dotnet ef migrations remove -s .\\src\\Api -p .\\src\\Infrastructure",
+    "efu": "dotnet ef database update -s .\\src\\Api -p .\\src\\Infrastructure",
+    "efu000": "dotnet ef database update 0 -s .\\src\\Api -p .\\src\\Infrastructure"
+  }
+}
