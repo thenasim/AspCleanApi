@@ -12,12 +12,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     {
         _context = context;
     }
-    
+
     public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var entity = new Product
         {
             Name = request.Name,
+            Price = request.Price,
             Quantity = request.Quantity
         };
 

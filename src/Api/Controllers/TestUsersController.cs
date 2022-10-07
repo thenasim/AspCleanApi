@@ -16,12 +16,16 @@ public class TestUsersController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<TestUser>>> GetAllTestUsers([FromQuery] GetAllTestUsersQuery query)
+    [ProducesResponseType(typeof(List<TestUser>), StatusCodes.Status200OK, "application/json")]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    public async Task<ActionResult<List<TestUser>>> GetAllTestUsers()
     {
-        return await _mediator.Send(query);
+        return await _mediator.Send(new GetAllTestUsersQuery());
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created, "text/plain")]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
     public async Task<ActionResult<int>> CreateTestUser([FromBody] CreateTestUserCommand command)
     {
         return await _mediator.Send(command);

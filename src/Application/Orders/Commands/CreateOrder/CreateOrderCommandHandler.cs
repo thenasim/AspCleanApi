@@ -28,17 +28,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         }
 
         // Create order
-        var order = new Order
-        {
-            ProductId = request.ProductId,
-            TotalProductOrdered = request.Quantity
-        };
+        using var transaction = _context.Database.BeginTransaction();
+        var order = new Order(request.ProductId, request.Quantity, product.Price);
         _context.Orders.Add(order);
 
         // Send domain events
         product.AddDomainEvent(new OrderCreated(product, request.Quantity));
 
         await _context.SaveChangesAsync(cancellationToken);
+        transaction.Commit();
 
         return order.Id;
     }

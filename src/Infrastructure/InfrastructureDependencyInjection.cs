@@ -41,6 +41,7 @@ public static class InfrastructureDependencyInjection
                     serverAction.SetPostgresVersion(dbVersion);
                 }
             });
+            optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
