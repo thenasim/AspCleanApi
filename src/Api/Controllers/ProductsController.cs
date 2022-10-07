@@ -3,6 +3,7 @@ using Application.Products.Commands.CreateProduct;
 using Application.Products.Queries.GetProductsWithPagination;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -19,6 +20,7 @@ public class ProductsController : ApiControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(typeof(List<ProductResponse>), StatusCodes.Status200OK, "application/json")]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
     public async Task<ActionResult<List<ProductResponse>>> Lists([FromQuery] GetProductsWithPaginationQuery query)
