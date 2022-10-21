@@ -10,7 +10,7 @@ namespace Api.Controllers;
 /// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-6.0
 /// </summary>
 [ApiExplorerSettings(IgnoreApi = true)]
-public class ErrorsController : ControllerBase
+public class ErrorController : ControllerBase
 {
     [Route("/error")]
     public IActionResult Error()
@@ -24,6 +24,9 @@ public class ErrorsController : ControllerBase
             NotImplementedException => HttpStatusCode.NotImplemented,
             _ => HttpStatusCode.InternalServerError
         };
+
+        if (statusCode == HttpStatusCode.BadRequest)
+            return ValidationProblem(exception?.Message, null, (int)statusCode);
 
         return Problem(exception?.Message, null, (int)statusCode);
     }

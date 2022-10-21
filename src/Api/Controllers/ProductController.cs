@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class ProductsController : ApiControllerBase
+public class ProductController : ApiControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public ProductsController(IMediator mediator, IMapper mapper)
+    public ProductController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;

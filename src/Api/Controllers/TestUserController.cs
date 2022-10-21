@@ -1,19 +1,18 @@
 using Api.Contracts.TestUsers;
 using Application.TestUsers.Commands.CreateTestUser;
 using Application.TestUsers.Queries.GetAllTestUsers;
-using Domain.Entities;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class TestUsersController : ApiControllerBase
+public class TestUserController : ApiControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public TestUsersController(IMediator mediator, IMapper mapper)
+    public TestUserController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
