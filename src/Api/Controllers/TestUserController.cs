@@ -3,19 +3,16 @@ using Api.Contracts.TestUsers;
 using Application.TestUsers.Commands.CreateTestUser;
 using Application.TestUsers.Queries.GetAllTestUsers;
 using MapsterMapper;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 public class TestUserController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public TestUserController(IMediator mediator, IMapper mapper)
+    public TestUserController(IMapper mapper)
     {
-        _mediator = mediator;
         _mapper = mapper;
     }
 
@@ -24,7 +21,7 @@ public class TestUserController : ApiControllerBase
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<List<TestUserResponse>>> GetAllTestUsers()
     {
-        var users = await _mediator.Send(new GetAllTestUsersQuery());
+        var users = await Mediator.Send(new GetAllTestUsersQuery());
         var response = _mapper.Map<List<TestUserResponse>>(users);
         return response;
     }
@@ -34,6 +31,6 @@ public class TestUserController : ApiControllerBase
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<int>> CreateTestUser([FromBody] CreateTestUserCommand command)
     {
-        return await _mediator.Send(command);
+        return await Mediator.Send(command);
     }
 }

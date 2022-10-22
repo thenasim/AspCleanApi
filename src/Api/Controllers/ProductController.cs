@@ -3,19 +3,16 @@ using Api.Contracts.Products;
 using Application.Products.Commands.CreateProduct;
 using Application.Products.Queries.GetProductsWithPagination;
 using MapsterMapper;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 public class ProductController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public ProductController(IMediator mediator, IMapper mapper)
+    public ProductController(IMapper mapper)
     {
-        _mediator = mediator;
         _mapper = mapper;
     }
 
@@ -24,7 +21,7 @@ public class ProductController : ApiControllerBase
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<List<ProductResponse>>> Lists([FromQuery] GetProductsWithPaginationQuery query)
     {
-        var products = await _mediator.Send(query);
+        var products = await Mediator.Send(query);
         var response = _mapper.Map<List<ProductResponse>>(products);
         return response;
     }
@@ -35,6 +32,6 @@ public class ProductController : ApiControllerBase
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command)
     {
         Response.StatusCode = StatusCodes.Status201Created;
-        return await _mediator.Send(command);
+        return await Mediator.Send(command);
     }
 }
