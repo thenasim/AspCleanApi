@@ -1,0 +1,10 @@
+@host=https://localhost:7283
+
+POST {{host}}/api/testuser
+Content-Type: application/json
+
+{
+  "fullName": "z",
+  "gender": 1,
+  "dateOfBirth": "2022-10-22"
+}

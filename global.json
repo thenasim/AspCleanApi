@@ -5,8 +5,8 @@
   },
   "scriptShell": "pwsh",
   "scripts": {
-    "bd": "dotnet run --project .\\src\\Api",
-    "br": "dotnet run --project .\\src\\Api --configuration Release",
+    "rd": "dotnet run --project .\\src\\Api",
+    "rr": "dotnet run --project .\\src\\Api --configuration Release",
     "efma": "dotnet ef migrations add -s .\\src\\Api -p .\\src\\Infrastructure -o Persistence\\Migrations",
     "efmr": "dotnet ef migrations remove -s .\\src\\Api -p .\\src\\Infrastructure",
     "efu": "dotnet ef database update -s .\\src\\Api -p .\\src\\Infrastructure",

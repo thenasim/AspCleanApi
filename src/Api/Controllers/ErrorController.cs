@@ -1,13 +1,13 @@
-﻿using System.Net;
-using System.Security.Authentication;
-using FluentValidation;
+﻿using System.Security.Authentication;
+using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Api.Controllers;
 
 /// <summary>
-/// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-6.0
+/// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling
 /// </summary>
 [ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorController : ControllerBase
@@ -17,17 +17,28 @@ public class ErrorController : ControllerBase
     {
         var exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
 
+        if (exception is AppValidationException validationException)
+        {
+            if (validationException.Errors is null)
+            {
+                return ValidationProblem(exception?.Message, null, StatusCodes.Status400BadRequest);
+            }
+
+            var modelState = new ModelStateDictionary();
+            foreach (var error in validationException.Errors)
+            {
+                modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+            return ValidationProblem(modelState);
+        }
+
         var statusCode = exception switch
         {
-            ValidationException => HttpStatusCode.BadRequest,
-            AuthenticationException => HttpStatusCode.Forbidden,
-            NotImplementedException => HttpStatusCode.NotImplemented,
-            _ => HttpStatusCode.InternalServerError
+            AuthenticationException => StatusCodes.Status403Forbidden,
+            NotImplementedException => StatusCodes.Status501NotImplemented,
+            _ => StatusCodes.Status500InternalServerError
         };
 
-        if (statusCode == HttpStatusCode.BadRequest)
-            return ValidationProblem(exception?.Message, null, (int)statusCode);
-
-        return Problem(exception?.Message, null, (int)statusCode);
+        return Problem(exception?.Message, null, statusCode);
     }
 }

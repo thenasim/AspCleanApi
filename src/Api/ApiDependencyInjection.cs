@@ -1,6 +1,8 @@
-﻿using Api.Common.Mappings;
+﻿using Api.Common;
+using Api.Common.Mappings;
 using Api.Settings;
 using Infrastructure.Common.Converters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Api;
 
@@ -16,6 +18,7 @@ internal static class ApiDependencyInjection
             {
                 options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
             });
+        services.AddSingleton<ProblemDetailsFactory, ApiProblemDetailsFactory>();
 
         services.Configure<RouteOptions>(options =>
         {

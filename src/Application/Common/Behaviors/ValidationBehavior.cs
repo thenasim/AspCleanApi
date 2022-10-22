@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.Common.Exceptions;
+using FluentValidation;
 using MediatR;
 
 namespace Application.Common.Behaviors;
@@ -6,28 +7,32 @@ namespace Application.Common.Behaviors;
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly IValidator<TRequest>? _validator;
+    private readonly IEnumerable<IValidator<TRequest>>? _validator;
 
-    public ValidationBehavior(IValidator<TRequest>? validator = null)
+    public ValidationBehavior(IEnumerable<IValidator<TRequest>>? validator = null)
     {
         _validator = validator;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if (_validator is null)
+        if (_validator is null || _validator.Any() == false)
         {
             return await next();
         }
 
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var context = new ValidationContext<TRequest>(request);
+        var validationResults = await Task.WhenAll(_validator.Select(v => v.ValidateAsync(context, cancellationToken)));
+        var failures = validationResults
+            .Where(x => x.Errors.Count > 0)
+            .SelectMany(x => x.Errors)
+            .ToList();
 
-        if (validationResult.IsValid)
+        if (failures.Count > 0)
         {
-            return await next();
+            throw new AppValidationException(failures);
         }
 
-        // If validation error occurs
-        throw new ValidationException(validationResult.Errors.FirstOrDefault()?.ErrorMessage ?? "Unknown error occurred");
+        return await next();
     }
 }
