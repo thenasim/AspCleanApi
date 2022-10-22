@@ -1,4 +1,5 @@
-﻿using Api.Contracts.Products;
+﻿using Api.Common.Constants;
+using Api.Contracts.Products;
 using Application.Products.Commands.CreateProduct;
 using Application.Products.Queries.GetProductsWithPagination;
 using MapsterMapper;
@@ -19,8 +20,8 @@ public class ProductController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(List<ProductResponse>), StatusCodes.Status200OK, "application/json")]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    [ProducesResponseType(typeof(List<ProductResponse>), StatusCodes.Status200OK, HttpContentTypes.Json)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<List<ProductResponse>>> Lists([FromQuery] GetProductsWithPaginationQuery query)
     {
         var products = await _mediator.Send(query);
@@ -29,8 +30,8 @@ public class ProductController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created, "text/plain")]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created, HttpContentTypes.TextPlain)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command)
     {
         Response.StatusCode = StatusCodes.Status201Created;

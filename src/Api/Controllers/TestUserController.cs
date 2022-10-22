@@ -1,3 +1,4 @@
+using Api.Common.Constants;
 using Api.Contracts.TestUsers;
 using Application.TestUsers.Commands.CreateTestUser;
 using Application.TestUsers.Queries.GetAllTestUsers;
@@ -19,8 +20,8 @@ public class TestUserController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(List<TestUserResponse>), StatusCodes.Status200OK, "application/json")]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    [ProducesResponseType(typeof(List<TestUserResponse>), StatusCodes.Status200OK, HttpContentTypes.Json)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<List<TestUserResponse>>> GetAllTestUsers()
     {
         var users = await _mediator.Send(new GetAllTestUsersQuery());
@@ -29,8 +30,8 @@ public class TestUserController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created, "text/plain")]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created, HttpContentTypes.TextPlain)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
     public async Task<ActionResult<int>> CreateTestUser([FromBody] CreateTestUserCommand command)
     {
         return await _mediator.Send(command);
