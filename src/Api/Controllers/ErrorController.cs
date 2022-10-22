@@ -32,13 +32,14 @@ public class ErrorController : ControllerBase
             return ValidationProblem(modelState);
         }
 
-        var statusCode = exception switch
+        var (statusCode, errorMessage) = exception switch
         {
-            AuthenticationException => StatusCodes.Status403Forbidden,
-            NotImplementedException => StatusCodes.Status501NotImplemented,
-            _ => StatusCodes.Status500InternalServerError
+            AuthenticationException => (StatusCodes.Status403Forbidden, "You are not authorized to perform this action."),
+            NotImplementedException => (StatusCodes.Status501NotImplemented, "Feature is not implemented."),
+            InvalidCastException => (StatusCodes.Status500InternalServerError, "Unable to cast from one type to another type."),
+            _ => (StatusCodes.Status500InternalServerError, "Unknown error has occurred.")
         };
 
-        return Problem(exception?.Message, null, statusCode);
+        return Problem(errorMessage, null, statusCode);
     }
 }
