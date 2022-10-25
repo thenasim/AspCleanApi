@@ -17,8 +17,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi3();
 }
 
-app.UseHealthChecks("/health");
 app.UseExceptionHandler("/error");
+app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
