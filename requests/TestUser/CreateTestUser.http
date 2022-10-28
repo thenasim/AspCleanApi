@@ -4,7 +4,8 @@ POST {{host}}/api/testuser
 Content-Type: application/json
 
 {
-  "fullName": "z",
+  "fullName": "Nasim",
+  "email": "nasim@gmail.com",
   "gender": 1,
-  "dateOfBirth": "2022-10-22"
+  "dateOfBirth": "2000-10-22"
 }

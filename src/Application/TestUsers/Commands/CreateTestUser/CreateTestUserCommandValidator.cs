@@ -1,5 +1,4 @@
 using Application.Common.Interfaces;
-using Domain.Common.Errors;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,11 +18,11 @@ public class CreateTestUserCommandValidator : AbstractValidator<CreateTestUserCo
             .MaximumLength(200);
 
         RuleFor(x => x.Email)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .EmailAddress()
             .MustAsync(BeUniqueEmail)
-            .WithErrorCode(Errors.TestUser.DuplicateEmail.Code)
-            .WithMessage(Errors.TestUser.DuplicateEmail.Description);
+            .WithMessage("Email already exists.");
 
         RuleFor(x => x.DateOfBirth)
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
