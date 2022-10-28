@@ -16,6 +16,7 @@ internal static class ApiDependencyInjection
             .AddControllers()
             .AddJsonOptions(options =>
             {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
             });
         services.AddSingleton<ProblemDetailsFactory, ApiProblemDetailsFactory>();
