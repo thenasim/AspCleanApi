@@ -8,6 +8,7 @@ public class TestUserConfiguration : IEntityTypeConfiguration<TestUser>
 {
     public void Configure(EntityTypeBuilder<TestUser> builder)
     {
-        // Configure
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
     }
 }
