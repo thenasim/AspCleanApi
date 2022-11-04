@@ -17,7 +17,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
 
     public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        // Check if product exists
+        // Load product
         var product = await _context.Products
             .AsTracking()
             .FirstAsync(x => x.Id == request.ProductId, cancellationToken);

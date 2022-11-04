@@ -17,6 +17,11 @@ public class OrderCreatedEventHandler : INotificationHandler<OrderCreated>
     {
         notification.Product.Quantity -= notification.Quantity;
 
+        if (notification.Product.Quantity == 0)
+        {
+            notification.Product.IsOutOfStock = true;
+        }
+
         return Task.CompletedTask;
     }
 }
