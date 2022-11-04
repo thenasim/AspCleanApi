@@ -2,7 +2,7 @@ using Application.TestUsers.Responses;
 using Domain.Entities;
 using Mapster;
 
-namespace Api.Common.Mappings;
+namespace Application.Common.Mappings;
 
 public class MappingConfigs : IRegister
 {

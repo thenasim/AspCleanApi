@@ -1,12 +1,13 @@
 using System.Reflection;
 using Mapster;
 using MapsterMapper;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Api.Common.Mappings;
+namespace Application.Common.Mappings;
 
-public static class MappingDependencyInjection
+internal static class MappingDependencyInjection
 {
-    public static IServiceCollection AddMappings(this IServiceCollection services)
+    internal static IServiceCollection AddMappings(this IServiceCollection services)
     {
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());

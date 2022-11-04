@@ -1,5 +1,4 @@
 ﻿using Api.Common;
-using Api.Common.Mappings;
 using Api.Settings;
 using Infrastructure.Common.Converters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -33,7 +32,6 @@ internal static class ApiDependencyInjection
             configure.Version = "1.0.0";
         });
         services.AddSettings();
-        services.AddMappings();
 
         return services;
     }
