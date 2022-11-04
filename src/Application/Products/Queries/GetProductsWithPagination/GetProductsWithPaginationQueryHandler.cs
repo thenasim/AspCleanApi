@@ -1,11 +1,12 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Entities;
+using Application.Products.Responses;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Products.Queries.GetProductsWithPagination;
 
-public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductsWithPaginationQuery, List<Product>>
+public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductsWithPaginationQuery, List<ProductResponse>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -13,11 +14,11 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProducts
     {
         _context = context;
     }
-    
-    public async Task<List<Product>> Handle(GetProductsWithPaginationQuery request, CancellationToken cancellationToken)
-    {
-        var products = await _context.Products.ToListAsync(cancellationToken);
 
-        return products;
+    public async Task<List<ProductResponse>> Handle(GetProductsWithPaginationQuery request, CancellationToken cancellationToken)
+    {
+        return await _context.Products
+            .ProjectToType<ProductResponse>()
+            .ToListAsync(cancellationToken);
     }
 }

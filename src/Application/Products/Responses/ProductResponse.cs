@@ -1,4 +1,4 @@
-namespace Api.Contracts.Products;
+namespace Application.Products.Responses;
 
 public class ProductResponse
 {

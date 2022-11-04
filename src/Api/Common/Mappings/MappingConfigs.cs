@@ -1,5 +1,4 @@
-using Api.Contracts.Products;
-using Api.Contracts.TestUsers;
+using Application.TestUsers.Responses;
 using Domain.Entities;
 using Mapster;
 
@@ -9,7 +8,7 @@ public class MappingConfigs : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Product, ProductResponse>();
-        config.NewConfig<TestUser, TestUserResponse>();
+        config.NewConfig<TestUser, TestUserResponse>()
+            .Map(dest => dest.ShortIntro, src => $"Name: {src.FullName}, Gender: {src.Gender.ToString()}");
     }
 }
