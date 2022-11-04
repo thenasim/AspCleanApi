@@ -1,7 +1,6 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Events;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,11 +20,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         // Check if product exists
         var product = await _context.Products
             .AsTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
-        if (product is null)
-        {
-            throw new ValidationException("Invalid product Id");
-        }
+            .FirstAsync(x => x.Id == request.ProductId, cancellationToken);
 
         // Create order
         using var transaction = _context.Database.BeginTransaction();
