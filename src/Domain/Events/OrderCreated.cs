@@ -3,9 +3,9 @@ using Domain.Entities;
 
 namespace Domain.Events;
 
-public class OrderCreated : BaseEvent
+public class OrderCreatedEvent : BaseEvent
 {
-    public OrderCreated(Product product, int quantity)
+    public OrderCreatedEvent(Product product, int quantity)
     {
         Product = product;
         Quantity = quantity;

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Orders.Events;
 
-public class OrderCreatedEventHandler : INotificationHandler<OrderCreated>
+public class OrderCreatedEventHandler : INotificationHandler<OrderCreatedEvent>
 {
     private readonly ILogger<OrderCreatedEventHandler> _logger;
 
@@ -13,7 +13,7 @@ public class OrderCreatedEventHandler : INotificationHandler<OrderCreated>
         _logger = logger;
     }
 
-    public Task Handle(OrderCreated notification, CancellationToken cancellationToken)
+    public Task Handle(OrderCreatedEvent notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Product with id: {notification.Product.Id} has been ordered with {notification.Quantity} items.");
 

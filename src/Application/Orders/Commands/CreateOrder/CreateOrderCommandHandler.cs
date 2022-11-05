@@ -31,7 +31,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         product.Quantity -= request.Quantity;
 
         // Send domain events
-        product.AddDomainEvent(new OrderCreated(product, request.Quantity));
+        product.AddDomainEvent(new OrderCreatedEvent(product, request.Quantity));
 
         await _context.SaveChangesAsync(cancellationToken);
         transaction.Commit();
