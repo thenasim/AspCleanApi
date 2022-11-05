@@ -1,26 +1,21 @@
-using Application.Common.Interfaces;
 using Domain.Events;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Orders.Events;
 
 public class OrderCreatedEventHandler : INotificationHandler<OrderCreated>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly ILogger<OrderCreatedEventHandler> _logger;
 
-    public OrderCreatedEventHandler(IApplicationDbContext context)
+    public OrderCreatedEventHandler(ILogger<OrderCreatedEventHandler> logger)
     {
-        _context = context;
+        _logger = logger;
     }
 
     public Task Handle(OrderCreated notification, CancellationToken cancellationToken)
     {
-        notification.Product.Quantity -= notification.Quantity;
-
-        if (notification.Product.Quantity == 0)
-        {
-            notification.Product.IsOutOfStock = true;
-        }
+        _logger.LogInformation($"Product with id: {notification.Product.Id} has been ordered with {notification.Quantity} items.");
 
         return Task.CompletedTask;
     }

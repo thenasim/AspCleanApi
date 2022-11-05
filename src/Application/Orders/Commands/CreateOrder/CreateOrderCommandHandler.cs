@@ -27,6 +27,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         var order = new Order(request.ProductId, request.Quantity, product.Price);
         _context.Orders.Add(order);
 
+        // Reduce quantity
+        product.Quantity -= request.Quantity;
+
         // Send domain events
         product.AddDomainEvent(new OrderCreated(product, request.Quantity));
 

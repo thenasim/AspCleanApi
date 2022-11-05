@@ -36,8 +36,8 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
         ValidationContext<CreateOrderCommand> _,
         CancellationToken cancellationToken)
     {
-        return await _context.Products.AllAsync(
+        return await _context.Products.CountAsync(
             x => x.Id == command.ProductId && x.Quantity >= requestedQuantity,
-            cancellationToken);
+            cancellationToken) == 1;
     }
 }
