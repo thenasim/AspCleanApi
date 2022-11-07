@@ -4,6 +4,7 @@ using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls();
 builder.Services
     .AddApi()
     .AddApplication()

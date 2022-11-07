@@ -16,7 +16,7 @@ public class Product : BaseAuditableEntity
         {
             _quantity = value;
 
-            if (_quantity == 0)
+            if (_quantity <= 0)
             {
                 IsOutOfStock = true;
             }
@@ -36,5 +36,10 @@ public class Product : BaseAuditableEntity
                 AddDomainEvent(new ProductOutOfStockEvent(this));
             }
         }
+    }
+
+    public void ReduceQuantity(int requestedQuantity)
+    {
+        Quantity -= requestedQuantity;
     }
 }
