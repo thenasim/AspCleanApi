@@ -10,5 +10,8 @@ public class TestUserConfiguration : IEntityTypeConfiguration<TestUser>
     {
         builder.HasIndex(x => x.Email)
             .IsUnique();
+
+        builder.HasIndex(x => x.Username)
+            .IsUnique();
     }
 }
