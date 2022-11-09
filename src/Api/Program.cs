@@ -8,7 +8,8 @@ builder.WebHost.UseUrls();
 builder.Services
     .AddApi()
     .AddApplication()
-    .AddInfrastructure(builder.Environment.IsDevelopment());
+    .AddInfrastructure(builder.Environment.IsDevelopment())
+    .AddMemoryCache();
 
 var app = builder.Build();
 

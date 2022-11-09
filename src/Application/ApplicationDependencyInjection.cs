@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Application.Common.Behaviors;
 using Application.Common.Mappings;
+using Application.TestUsers.Queries.CheckUsernameAvailable;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,13 @@ public static class ApplicationDependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+        AddCustomBehavior(services);
+
         return services;
+    }
+
+    private static void AddCustomBehavior(IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<CheckUsernameAvailableQuery, bool>), typeof(CheckUsernameAvailableQueryCacheBehavior));
     }
 }
