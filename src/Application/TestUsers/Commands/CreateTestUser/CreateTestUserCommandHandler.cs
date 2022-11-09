@@ -19,6 +19,7 @@ public class CreateTestUserCommandHandler : IRequestHandler<CreateTestUserComman
         {
             FullName = request.FullName!,
             Email = request.Email!,
+            Username = request.Username!,
             DateOfBirth = request.DateOfBirth,
             Gender = request.Gender
         };

@@ -24,6 +24,14 @@ public class CreateTestUserCommandValidator : AbstractValidator<CreateTestUserCo
             .MustAsync(BeUniqueEmail)
             .WithMessage("Email already exists.");
 
+        RuleFor(x => x.Username)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .MinimumLength(4)
+            .MaximumLength(20)
+            .MustAsync(BeUniqueUsername)
+            .WithMessage("Username already exists.");
+
         RuleFor(x => x.DateOfBirth)
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
             .WithMessage("Date must be 18 years before")
@@ -38,5 +46,10 @@ public class CreateTestUserCommandValidator : AbstractValidator<CreateTestUserCo
     public async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
     {
         return await _context.TestUsers.AllAsync(x => x.Email != email, cancellationToken);
+    }
+
+    public async Task<bool> BeUniqueUsername(string username, CancellationToken cancellationToken)
+    {
+        return await _context.TestUsers.AllAsync(x => x.Username != username, cancellationToken);
     }
 }
