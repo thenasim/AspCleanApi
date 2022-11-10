@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
+using EntityFramework.Exceptions.PostgreSQL;
 using Infrastructure.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.HasPostgresEnum<Gender>();
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.UseExceptionProcessor();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
