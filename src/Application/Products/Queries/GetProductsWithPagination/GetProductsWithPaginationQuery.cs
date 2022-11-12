@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
+using Application.Common.Interfaces;
 using Application.Products.Responses;
-using MediatR;
 
 namespace Application.Products.Queries.GetProductsWithPagination;
 
-public class GetProductsWithPaginationQuery : IRequest<List<ProductResponse>>
+public class GetProductsWithPaginationQuery : IQuery<List<ProductResponse>>
 {
     [DefaultValue(1)]
     public int PageNumber { get; set; } = 1;

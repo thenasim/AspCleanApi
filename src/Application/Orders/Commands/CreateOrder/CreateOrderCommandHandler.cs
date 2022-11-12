@@ -1,12 +1,13 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Events;
+using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Orders.Commands.CreateOrder;
 
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
+public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, ErrorOr<int>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -15,7 +16,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         _context = context;
     }
 
-    public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         // Load product
         var product = await _context.Products

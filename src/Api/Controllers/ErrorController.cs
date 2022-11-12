@@ -27,7 +27,7 @@ public class ErrorController : ControllerBase
             var modelState = new ModelStateDictionary();
             foreach (var error in validationException.Errors)
             {
-                modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                modelState.AddModelError(error.Code, error.Description);
             }
             return ValidationProblem(modelState);
         }

@@ -11,17 +11,30 @@ public class ProductController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(List<ProductResponse>), StatusCodes.Status200OK, HttpContentTypes.Json)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
-    public async Task<ActionResult<List<ProductResponse>>> Lists([FromQuery] GetProductsWithPaginationQuery query)
+    public async Task<IActionResult> Lists([FromQuery] GetProductsWithPaginationQuery query)
     {
-        return await Mediator.Send(query);
+        var result = await Mediator.Send(query);
+
+        return result.Match(
+          value => Ok(value),
+          errors => Problem(errors)
+        );
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created, HttpContentTypes.TextPlain)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
-    public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
     {
-        Response.StatusCode = StatusCodes.Status201Created;
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return result.Match(
+          value =>
+          {
+              Response.StatusCode = StatusCodes.Status201Created;
+              return Ok(value);
+          },
+          errors => Problem(errors)
+        );
     }
 }

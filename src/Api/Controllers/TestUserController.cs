@@ -12,24 +12,43 @@ public class TestUserController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(List<TestUserResponse>), StatusCodes.Status200OK, HttpContentTypes.Json)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
-    public async Task<ActionResult<List<TestUserResponse>>> GetAllTestUsers()
+    public async Task<IActionResult> GetAllTestUsers()
     {
-        return await Mediator.Send(new GetAllTestUsersQuery());
+        var result = await Mediator.Send(new GetAllTestUsersQuery());
+
+        return result.Match(
+          value => Ok(value),
+          errors => Problem(errors)
+        );
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created, HttpContentTypes.TextPlain)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
-    public async Task<ActionResult<int>> CreateTestUser([FromBody] CreateTestUserCommand command)
+    public async Task<IActionResult> CreateTestUser([FromBody] CreateTestUserCommand command)
     {
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return result.Match(
+          value =>
+          {
+              Response.StatusCode = StatusCodes.Status201Created;
+              return Ok(value);
+          },
+          errors => Problem(errors)
+        );
     }
 
-    [HttpPost("check-username-availability")]
+    [HttpPost("is-username-available")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK, HttpContentTypes.TextPlain)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest, HttpContentTypes.ProblemJson)]
-    public async Task<ActionResult<bool>> CheckUsernameAvailable([FromBody] CheckUsernameAvailableQuery query)
+    public async Task<IActionResult> CheckUsernameAvailable([FromBody] CheckUsernameAvailableQuery query)
     {
-        return await Mediator.Send(query);
+        var result = await Mediator.Send(query);
+
+        return result.Match(
+          value => Ok(value),
+          errors => Problem(errors)
+        );
     }
 }

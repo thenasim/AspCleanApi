@@ -2,6 +2,7 @@
 using Application.Common.Behaviors;
 using Application.Common.Mappings;
 using Application.TestUsers.Queries.CheckUsernameAvailable;
+using ErrorOr;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,6 @@ public static class ApplicationDependencyInjection
 
     private static void AddCustomBehavior(IServiceCollection services)
     {
-        services.AddTransient(typeof(IPipelineBehavior<CheckUsernameAvailableQuery, bool>), typeof(CheckUsernameAvailableQueryCacheBehavior));
+        services.AddTransient(typeof(IPipelineBehavior<CheckUsernameAvailableQuery, ErrorOr<bool>>), typeof(CheckUsernameAvailableQueryCacheBehavior));
     }
 }

@@ -1,10 +1,11 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
+using ErrorOr;
 using MediatR;
 
 namespace Application.TestUsers.Commands.CreateTestUser;
 
-public class CreateTestUserCommandHandler : IRequestHandler<CreateTestUserCommand, int>
+public class CreateTestUserCommandHandler : IRequestHandler<CreateTestUserCommand, ErrorOr<int>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -13,7 +14,7 @@ public class CreateTestUserCommandHandler : IRequestHandler<CreateTestUserComman
         _context = context;
     }
 
-    public async Task<int> Handle(CreateTestUserCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<int>> Handle(CreateTestUserCommand request, CancellationToken cancellationToken)
     {
         var testUser = new TestUser
         {

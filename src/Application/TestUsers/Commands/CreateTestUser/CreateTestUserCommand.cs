@@ -1,9 +1,9 @@
+using Application.Common.Interfaces;
 using Domain.Enums;
-using MediatR;
 
 namespace Application.TestUsers.Commands.CreateTestUser;
 
-public class CreateTestUserCommand : IRequest<int>
+public class CreateTestUserCommand : ICommand<int>
 {
     public string? FullName { get; set; }
     public string? Email { get; set; }

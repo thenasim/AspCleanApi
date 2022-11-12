@@ -1,8 +1,8 @@
-using MediatR;
+using Application.Common.Interfaces;
 
 namespace Application.TestUsers.Queries.CheckUsernameAvailable;
 
-public class CheckUsernameAvailableQuery : IRequest<bool>
+public class CheckUsernameAvailableQuery : IQuery<bool>
 {
     public string? Username { get; set; }
 }

@@ -1,12 +1,13 @@
 using Application.Common.Interfaces;
 using Application.TestUsers.Responses;
+using ErrorOr;
 using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.TestUsers.Queries.GetAllTestUsers;
 
-public class GetAllTestUsersQueryHandler : IRequestHandler<GetAllTestUsersQuery, List<TestUserResponse>>
+public class GetAllTestUsersQueryHandler : IRequestHandler<GetAllTestUsersQuery, ErrorOr<List<TestUserResponse>>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -15,7 +16,7 @@ public class GetAllTestUsersQueryHandler : IRequestHandler<GetAllTestUsersQuery,
         _context = context;
     }
 
-    public async Task<List<TestUserResponse>> Handle(GetAllTestUsersQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<TestUserResponse>>> Handle(GetAllTestUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _context.TestUsers
             .ToListAsync();
