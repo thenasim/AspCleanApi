@@ -38,8 +38,8 @@ public class Product : BaseAuditableEntity
         }
     }
 
-    public void ReduceQuantity(int requestedQuantity)
+    public void AddOrder(Order newOrder)
     {
-        Quantity -= requestedQuantity;
+        Quantity -= newOrder.OrderedQuantity;
     }
 }
