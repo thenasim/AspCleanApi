@@ -17,9 +17,8 @@ public static class InfrastructureDependencyInjection
     {
         services.AddSettings();
 
-        // Configure Entity Framework // TODO: AddDbContextPool (But dependency injection will not work in AppDbContext because context pool works like singleton)
         services.AddSingleton<AuditableEntitySaveChangesInterceptor>();
-        services.AddDbContext<ApplicationDbContext>((provider, optionsBuilder) =>
+        services.AddDbContextPool<ApplicationDbContext>((provider, optionsBuilder) =>
         {
             var dbOptions = provider.GetService<IOptions<DatabaseSettings>>()?.Value ??
                             throw new Exception($"{nameof(DatabaseSettings)} could not be loaded.");

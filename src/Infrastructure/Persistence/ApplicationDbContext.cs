@@ -2,10 +2,11 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
-using EntityFramework.Exceptions.PostgreSQL;
 using Infrastructure.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
 namespace Infrastructure.Persistence;
@@ -14,9 +15,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IMediator _mediator;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IMediator mediator) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        _mediator = mediator;
+        _mediator = this.GetService<IMediator>();
 
         // Map enums
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
@@ -36,7 +37,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.UseExceptionProcessor();
+        // Does not work with pooling :(
+        //optionsBuilder.UseExceptionProcessor();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
