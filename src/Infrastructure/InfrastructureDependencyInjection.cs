@@ -6,6 +6,7 @@ using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Settings;
 using Infrastructure.Settings.Database;
 using Microsoft.EntityFrameworkCore;
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -43,6 +44,7 @@ public static class InfrastructureDependencyInjection
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            optionsBuilder.UseExceptionProcessor();
 
             if (isDevelopment)
             {
