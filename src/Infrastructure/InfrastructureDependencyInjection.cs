@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Npgsql;
+using Domain.Enums;
 
 namespace Infrastructure;
 
@@ -24,8 +26,9 @@ public static class InfrastructureDependencyInjection
             var dbOptions = provider.GetService<IOptions<DatabaseSettings>>()?.Value ??
                             throw new Exception($"{nameof(DatabaseSettings)} could not be loaded.");
             var auditableEntitySaveChangesInterceptor = provider.GetRequiredService<AuditableEntitySaveChangesInterceptor>();
+            var dataSource = ConfigureNpgsqlDataSource(dbOptions.ConnectionString!);
 
-            optionsBuilder.UseNpgsql(dbOptions.ConnectionString!, serverAction =>
+            optionsBuilder.UseNpgsql(dataSource, serverAction =>
             {
                 serverAction.EnableRetryOnFailure(dbOptions.MaxRetryOnFailure);
                 serverAction.CommandTimeout(dbOptions.CommandTimeout);
@@ -58,5 +61,15 @@ public static class InfrastructureDependencyInjection
         services.AddTransient<IDateTimeService, DateTimeService>();
 
         return services;
+    }
+
+    private static NpgsqlDataSource ConfigureNpgsqlDataSource(string connectionString)
+    {
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString!);
+
+        // Map enums
+        dataSourceBuilder.MapEnum<Gender>();
+
+        return dataSourceBuilder.Build();
     }
 }

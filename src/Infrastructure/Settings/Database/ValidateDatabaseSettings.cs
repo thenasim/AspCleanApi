@@ -4,7 +4,7 @@ namespace Infrastructure.Settings.Database;
 
 public class ValidateDatabaseSettings : IValidateOptions<DatabaseSettings>
 {
-    public ValidateOptionsResult Validate(string name, DatabaseSettings options)
+    public ValidateOptionsResult Validate(string? name, DatabaseSettings options)
     {
         const string errorHeadline = "Validation failed in appsettings.json";
 

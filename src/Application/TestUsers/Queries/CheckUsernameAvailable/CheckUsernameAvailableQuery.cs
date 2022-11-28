@@ -4,5 +4,5 @@ namespace Application.TestUsers.Queries.CheckUsernameAvailable;
 
 public class CheckUsernameAvailableQuery : IQuery<bool>
 {
-    public string? Username { get; set; }
+    public string Username { get; set; } = string.Empty;
 }

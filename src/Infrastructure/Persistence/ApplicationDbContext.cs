@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
 
 namespace Infrastructure.Persistence;
 
@@ -18,9 +17,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         _mediator = this.GetService<IMediator>();
-
-        // Map enums
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
