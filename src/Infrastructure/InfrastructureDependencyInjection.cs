@@ -21,14 +21,17 @@ public static class InfrastructureDependencyInjection
         services.AddSettings();
 
         services.AddSingleton<AuditableEntitySaveChangesInterceptor>();
-        services.AddDbContextPool<ApplicationDbContext>((provider, optionsBuilder) =>
+        services.AddDbContext<ApplicationDbContext>((provider, optionsBuilder) =>
         {
             var dbOptions = provider.GetService<IOptions<DatabaseSettings>>()?.Value ??
                             throw new Exception($"{nameof(DatabaseSettings)} could not be loaded.");
             var auditableEntitySaveChangesInterceptor = provider.GetRequiredService<AuditableEntitySaveChangesInterceptor>();
-            var dataSource = ConfigureNpgsqlDataSource(dbOptions.ConnectionString!);
 
-            optionsBuilder.UseNpgsql(dataSource, serverAction =>
+            // var dataSourceBuilder = new NpgsqlDataSourceBuilder(dbOptions.ConnectionString!);
+            // MapPostgresEnums(dataSourceBuilder);
+            // var dataSource = dataSourceBuilder.Build();
+
+            optionsBuilder.UseNpgsql(dbOptions.ConnectionString!, serverAction =>
             {
                 serverAction.EnableRetryOnFailure(dbOptions.MaxRetryOnFailure);
                 serverAction.CommandTimeout(dbOptions.CommandTimeout);
@@ -63,13 +66,8 @@ public static class InfrastructureDependencyInjection
         return services;
     }
 
-    private static NpgsqlDataSource ConfigureNpgsqlDataSource(string connectionString)
+    private static void MapPostgresEnums(NpgsqlDataSourceBuilder dataSourceBuilder)
     {
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString!);
-
-        // Map enums
         dataSourceBuilder.MapEnum<Gender>();
-
-        return dataSourceBuilder.Build();
     }
 }

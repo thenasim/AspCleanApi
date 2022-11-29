@@ -5,8 +5,9 @@ using Domain.Enums;
 using Infrastructure.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
+// using Microsoft.EntityFrameworkCore.Infrastructure;
+// using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace Infrastructure.Persistence;
 
@@ -14,9 +15,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IMediator _mediator;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    [Obsolete]
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IMediator mediator) : base(options)
     {
-        _mediator = this.GetService<IMediator>();
+        //_mediator = this.GetService<IMediator>();
+        _mediator = mediator;
+
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
